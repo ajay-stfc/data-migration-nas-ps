@@ -1,4 +1,4 @@
-# Delta Migration API
+# Data Migration API
 
 FastAPI wrapper around rsync for delta copy between folders.
 

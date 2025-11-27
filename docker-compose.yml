@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  delta-migration-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: delta-migration-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./source:/app/source
+      - ./destination:/app/destination
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
